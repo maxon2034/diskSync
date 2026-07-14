@@ -17,7 +17,7 @@ func Load(path string) (*Config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error in reading file: %w", err)
 	}
-	err = yaml.Unmarshal(data, config)
+	err = yaml.Unmarshal(data, &config)
 	if err != nil {
 		return nil, fmt.Errorf("Error in unmarshalling configuration: %w", err)
 	}
