@@ -2,12 +2,16 @@ package main
 
 import (
 	"diskSync/src/internal/config"
-	"fmt"
+	"diskSync/src/internal/lib/logger"
+	"log/slog"
 )
 
 func main() {
-	_, err := config.Load("src/internal/config/conf.yaml")
+	env, err := config.Load("src/config/config.yaml")
+	logger := logger.New(env.Env)
 	if err != nil {
-		fmt.Println(err)
+		logger.Error("error", slog.String("error", err.Error()))
+		return
 	}
+	logger.Info("config loaded", slog.String("path", "config.yaml"))
 }
