@@ -8,10 +8,16 @@ import (
 
 func main() {
 	env, err := config.Load("src/config/config.yaml")
-	logger := logger.New(env.Env)
+	var log *slog.Logger
 	if err != nil {
-		logger.Error("error", slog.String("error", err.Error()))
+		log = logger.New("local")
+	} else {
+		log = logger.New(env.Env)
+	}
+
+	if err != nil {
+		log.Error("error", slog.String("error", err.Error()))
 		return
 	}
-	logger.Info("config loaded", slog.String("path", "config.yaml"))
+	log.Info("config loaded", slog.String("path", "config.yaml"))
 }
