@@ -8,7 +8,12 @@ import (
 )
 
 type Config struct {
-	Env string `yaml:"env"`
+	Env         string `yaml:"env"`
+	GoogleDrive struct {
+		ClientID     string `yaml:"client_id"`
+		ClientSecret string `yaml:"client_secret"`
+		TokenPath    string `yaml:"token_path"`
+	} `yaml:"google_drive"`
 }
 
 func Load(path string) (*Config, error) {
