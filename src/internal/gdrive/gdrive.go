@@ -12,17 +12,13 @@ import (
 	"google.golang.org/api/option"
 )
 
-type Client struct {
-	Service *drive.Service
-}
-
 func New(ctx context.Context, clientID, clientSecret, tokenPath string) (*Client, error) {
 	client := Client{}
 	config := oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
 		Endpoint:     google.Endpoint,
-		Scopes:       []string{drive.DriveFileScope},
+		Scopes:       []string{drive.DriveReadonlyScope},
 		RedirectURL:  "http://localhost:8080",
 	}
 
