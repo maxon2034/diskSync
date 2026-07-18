@@ -3,6 +3,7 @@ package ydisk
 import (
 	"context"
 	"diskSync/src/internal/config"
+	"diskSync/src/internal/storage"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -27,7 +28,7 @@ type Client struct {
 	HTTPClient *http.Client
 }
 
-func (c *Client) ListFiles(ctx context.Context) ([]ydiskFile, error) {
+func (c *Client) ListFiles(ctx context.Context) ([]storage.File, error) {
 	apiURL := "https://cloud-api.yandex.net/v1/disk/resources?path=/"
 
 	cfg, err := config.Load("src/config/config.yaml")
@@ -62,7 +63,11 @@ func (c *Client) ListFiles(ctx context.Context) ([]ydiskFile, error) {
 	if err := json.NewDecoder(resp.Body).Decode(&rawResponse); err != nil {
 		return nil, fmt.Errorf("decode response body: %w", err)
 	}
+	storage := make([]storage.File, len(rawResponse.Embedded.Items))
+	for i, v := range rawResponse.Embedded.Items {
+		storage[i].Name = v.Name
+		storage[i].Type = v.Type
+	}
 
-	// Возвращаем чистый слайс элементов
-	return rawResponse.Embedded.Items, nil
+	return storage, nil
 }
