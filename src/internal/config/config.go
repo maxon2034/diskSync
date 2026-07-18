@@ -14,6 +14,11 @@ type Config struct {
 		ClientSecret string `yaml:"client_secret"`
 		TokenPath    string `yaml:"token_path"`
 	} `yaml:"google_drive"`
+	YandexDisk struct {
+		ClientID     string `yaml:"client_id"`
+		ClientSecret string `yaml:"client_secret"`
+		TokenPath    string `yaml:"token_path"`
+	} `yaml:"yandex_disk"`
 }
 
 func Load(path string) (*Config, error) {

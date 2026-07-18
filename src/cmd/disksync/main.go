@@ -5,7 +5,7 @@ import (
 	"diskSync/src/internal/config"
 	"diskSync/src/internal/gdrive"
 	"diskSync/src/internal/lib/logger"
-	"fmt"
+	"diskSync/src/internal/ydisk"
 	"log/slog"
 )
 
@@ -23,18 +23,16 @@ func main() {
 		return
 	}
 	log.Info("config loaded", slog.String("path", "config.yaml"))
-	client, err := gdrive.New(ctx, config.GoogleDrive.ClientID, config.GoogleDrive.ClientSecret, config.GoogleDrive.TokenPath)
+	_, err = gdrive.New(ctx, config.GoogleDrive.ClientID, config.GoogleDrive.ClientSecret, config.GoogleDrive.TokenPath)
 	if err != nil {
 		log.Error("error", slog.String("error", err.Error()))
 		return
 	}
-	log.Info("successful connection", slog.String("token", "created"))
-	list, err := client.ListFiles(ctx)
+	log.Info("successful connection", slog.String("connected service", "google drive"))
+	_, err = ydisk.New(ctx, config.YandexDisk.ClientID, config.YandexDisk.ClientSecret, config.YandexDisk.TokenPath)
 	if err != nil {
 		log.Error("error", slog.String("error", err.Error()))
+		return
 	}
-	fmt.Print(len(list))
-	for _, v := range list {
-		log.Info("- File", slog.String("name", v.Name))
-	}
+	log.Info("successful connection", slog.String("connected service", "yandex disk"))
 }
