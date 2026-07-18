@@ -47,7 +47,10 @@ func main() {
 	}
 	storageLocal, err := storages["Local Files"].ListFiles(ctx)
 	storageGoogle, err := storages["Google Drive"].ListFiles(ctx)
-	diff := differ.Diff(storageLocal, storageGoogle)
-	log.Info("Files to sync", slog.String("storage", "Google Drive"), slog.String("files to sunc", fmt.Sprint(len(diff))))
+	storageYandex, err := storages["Yandex Disk"].ListFiles(ctx)
+	diffGoogle := differ.Diff(storageLocal, storageGoogle)
+	log.Info("Files to sync", slog.String("storage", "Google Drive"), slog.String("files to sunc", fmt.Sprint(len(diffGoogle))))
+	diffYandex := differ.Diff(storageLocal, storageYandex)
+	log.Info("Files to sync", slog.String("storage", "Yandex Disk"), slog.String("files to sunc", fmt.Sprint(len(diffYandex))))
 
 }
