@@ -29,10 +29,18 @@ func main() {
 		return
 	}
 	log.Info("successful connection", slog.String("connected service", "google drive"))
-	_, err = ydisk.New(ctx, config.YandexDisk.ClientID, config.YandexDisk.ClientSecret, config.YandexDisk.TokenPath)
+	clientYandex, err := ydisk.New(ctx, config.YandexDisk.ClientID, config.YandexDisk.ClientSecret, config.YandexDisk.TokenPath)
 	if err != nil {
 		log.Error("error", slog.String("error", err.Error()))
 		return
 	}
 	log.Info("successful connection", slog.String("connected service", "yandex disk"))
+	list, err := clientYandex.ListFiles(ctx)
+	if err != nil {
+		log.Error("error", slog.String("error", err.Error()))
+	}
+	for _, v := range list {
+		log.Info("yandex disk file", slog.String("name", v.Name))
+	}
+
 }

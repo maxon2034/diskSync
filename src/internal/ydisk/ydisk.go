@@ -4,15 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"os"
 
 	"golang.org/x/oauth2"
 )
-
-type Client struct {
-	HTTPClient *http.Client
-}
 
 func New(ctx context.Context, clientID, clientSecret, tokenPath string) (*Client, error) {
 	client := new(Client)
