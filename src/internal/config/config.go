@@ -19,6 +19,7 @@ type Config struct {
 		ClientSecret string `yaml:"client_secret"`
 		TokenPath    string `yaml:"token_path"`
 	} `yaml:"yandex_disk"`
+	LocalDir string `yaml:"local_dir"`
 }
 
 func Load(path string) (*Config, error) {

@@ -5,6 +5,7 @@ import (
 	"diskSync/src/internal/config"
 	"diskSync/src/internal/gdrive"
 	"diskSync/src/internal/lib/logger"
+	"diskSync/src/internal/localfs"
 	"diskSync/src/internal/storage"
 	"diskSync/src/internal/ydisk"
 	"fmt"
@@ -37,12 +38,17 @@ func main() {
 		return
 	}
 	log.Info("successful connection", slog.String("connected service", "yandex disk"))
+	clientLocal := localfs.New(config.LocalDir)
 	storages := map[string]storage.Storage{
 		"Google Drive": clientGoogle,
 		"Yandex Disk":  clientYandex,
+		"Local Files":  clientLocal,
 	}
 	for name, s := range storages {
-		files, _ := s.ListFiles(ctx)
-		log.Info("total", slog.String(name, fmt.Sprint(len(files))))
+		files, err := s.ListFiles(ctx)
+		if err != nil {
+			log.Error("error", slog.String("error", err.Error()))
+		}
+		log.Info("total", slog.String("storage", name), slog.String("count", fmt.Sprint(len(files))))
 	}
 }
