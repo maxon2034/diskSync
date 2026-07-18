@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"diskSync/src/internal/config"
+	"diskSync/src/internal/differ"
 	"diskSync/src/internal/gdrive"
 	"diskSync/src/internal/lib/logger"
 	"diskSync/src/internal/localfs"
@@ -44,11 +45,9 @@ func main() {
 		"Yandex Disk":  clientYandex,
 		"Local Files":  clientLocal,
 	}
-	for name, s := range storages {
-		files, err := s.ListFiles(ctx)
-		if err != nil {
-			log.Error("error", slog.String("error", err.Error()))
-		}
-		log.Info("total", slog.String("storage", name), slog.String("count", fmt.Sprint(len(files))))
-	}
+	storageLocal, err := storages["Local Files"].ListFiles(ctx)
+	storageGoogle, err := storages["Google Drive"].ListFiles(ctx)
+	diff := differ.Diff(storageLocal, storageGoogle)
+	log.Info("Files to sync", slog.String("storage", "Google Drive"), slog.String("files to sunc", fmt.Sprint(len(diff))))
+
 }
